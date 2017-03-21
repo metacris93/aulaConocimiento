@@ -8,7 +8,7 @@
 <body class="hold-transition login-page">
     <div class="login-box">
         <div class="login-logo">
-            <img src="/aulaConocimiento/resources/image/logo.png" alt="Hogar de Cristo" height="90" width="370">
+            <img src="{{asset('/image/logo.png')}}" alt="Hogar de Cristo" height="90" width="370">
         </div><!-- .login-logo -->
 
     @if (count($errors) > 0)

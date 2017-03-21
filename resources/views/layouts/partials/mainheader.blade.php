@@ -5,7 +5,7 @@
        <!-- mini logo for sidebar mini 50x50 pixels -->      
         <!-- <span class="logo-mini"><b>A</b>LT</span>      -->
         <!-- logo for regular state and mobile devices -->
-        <img src="/aulaConocimiento/resources/image/logo.png" alt="Hogar de Cristo" height="60" width="200">        
+        <img src="{{asset('/image/logo.png')}}" alt="Hogar de Cristo" height="60" width="200">        
         <!-- <span class="logo-lg"><b>Admin</b>LTE Laravel </span>      -->
     </a>
     <!-- Header Navbar -->
