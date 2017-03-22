@@ -27,7 +27,7 @@
     <form action='auth/login' method="post">
         <input type="hidden" name="_token" value="{{ csrf_token() }}">
         <div class="form-group has-feedback">
-            <input type="email" class="form-control" placeholder="email" name="email" />
+            <input type="text" class="form-control" maxlength="20" placeholder="username" name="username" />
             <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
         </div>
         <div class="form-group has-feedback">

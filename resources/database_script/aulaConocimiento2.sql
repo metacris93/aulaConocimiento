@@ -1,5 +1,5 @@
-create database `aulaConocimiento`;
-use `aulaConocimiento`;
+create database `aulaconocimiento`;
+use `aulaconocimiento`;
 -- phpMyAdmin SQL Dump
 -- version 4.5.1
 -- http://www.phpmyadmin.net
@@ -512,6 +512,7 @@ INSERT INTO `taller` (`id`, `titulo`, `duracion`, `curso_id`) VALUES
 
 CREATE TABLE `users` (
   `id` int(10) NOT NULL,
+  `username` varchar(20) CHARACTER SET utf8 NOT NULL, 
   `name` varchar(255) CHARACTER SET utf8 NOT NULL,
   `rol` varchar(255) CHARACTER SET utf8 NOT NULL,
   `email` varchar(255) CHARACTER SET utf8 NOT NULL,
@@ -526,9 +527,9 @@ CREATE TABLE `users` (
 -- Volcado de datos para la tabla `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `rol`, `email`, `password`, `remember_token`, `created_at`, `updated_at`, `ente_id`) VALUES
-(1, 'admin2', '1', 'admin2@gmail.com', '$2y$10$j/eBhQxz0mkf61v0cRYhKOPfQgTBXmZZvdTPujiTGT4S1kxzKlt4m', 'jLHEQRBrA8PEGKrwCMchXiQae6i47fKHMsDLOMhKYqMoXCkIaUJzvSgM84jL', '2016-10-08 12:59:21', '2016-11-06 09:02:13', 0),
-(2, 'estudiante', '0', 'estudiante@gmail.com', '$2y$10$7F.LQPlRQfGQZFNed5u63.y8Vmm0pEzf9JT68BrO/sZ8G1tiIMne6', 'gO3F3jaMiQKZJAhTn1e2Z6PzSnV6DSnyHydlknpeRUX0Ge118Y18blDYRplc', '2016-10-08 12:59:22', '2016-10-28 20:43:20', 0);
+INSERT INTO `users` (`id`, `username`,`name`, `rol`, `email`, `password`, `remember_token`, `created_at`, `updated_at`, `ente_id`) VALUES
+(1, 'admin2', 'admin2','1', 'admin2@gmail.com', '$2y$10$j/eBhQxz0mkf61v0cRYhKOPfQgTBXmZZvdTPujiTGT4S1kxzKlt4m', 'jLHEQRBrA8PEGKrwCMchXiQae6i47fKHMsDLOMhKYqMoXCkIaUJzvSgM84jL', '2016-10-08 12:59:21', '2016-11-06 09:02:13', 0),
+(2, 'estudiante', 'estudiante','0', 'estudiante@gmail.com', '$2y$10$7F.LQPlRQfGQZFNed5u63.y8Vmm0pEzf9JT68BrO/sZ8G1tiIMne6', 'gO3F3jaMiQKZJAhTn1e2Z6PzSnV6DSnyHydlknpeRUX0Ge118Y18blDYRplc', '2016-10-08 12:59:22', '2016-10-28 20:43:20', 0);
 
 --
 -- Índices para tablas volcadas
