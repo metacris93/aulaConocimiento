@@ -24,7 +24,7 @@
 
     <div class="login-box-body">
     <p class="login-box-msg"> Login para iniciar tu sesión </p>
-    <form action='auth/login' method="post">
+    <form action='/iniciarSesion' method="post">
         <input type="hidden" name="_token" value="{{ csrf_token() }}">
         <div class="form-group has-feedback">
             <input type="text" class="form-control" maxlength="20" placeholder="username" name="username" />

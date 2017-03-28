@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\DB;
 use Auth;
 use App\EvaluacionUsers;
 use App\Evaluacion;
+use Session;
+use Redirect;
 
 
 /**
@@ -28,7 +30,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth'); 
+        $this->middleware('auth', ['except' => 'homePage']); 
     }
 
     /**
@@ -73,6 +75,23 @@ where ta.curso_id = 1',[$user]);
          $tutoria=$eval->entaller->titulo;
          }
         return view('home',['pastel'=>$collection])->with('tutoria',$tutoria);
+    }
+
+    public function homePage()
+    {
+        $idUser = Session::get('idUser');
+        switch ($idUser) {
+            case 'estudiante':
+                return Redirect::to('home');
+            break;
+            case 'administrador':
+                return Redirect::to('home');
+            break;
+            default:
+                return view('auth/login');
+            break;
+        }
+        return view('auth/login');
     }
 
 }

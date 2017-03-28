@@ -11,18 +11,18 @@
 |
 */
 
-
-
-Route::get('/', function () {
-    return view('auth/login');
-});
-
+//Route::get('/', function () { return view('auth/login');});
+Route::get('/', 'HomeController@homePage');
 Route::get('home','HomeController@index');
 
+//////////////////////////////////////////
+Route::post('iniciarSesion', 'Auth\AuthController@iniciarSesion');
+Route::get('salir', 'Auth\AuthController@Salir');
+//////////////////////////////////////////
 
-Route::get('auth/login', 'Auth\AuthController@getLogin');
-Route::post('auth/login', ['as' =>'auth/login', 'uses' => 'Auth\AuthController@postLogin']);
-Route::get('auth/logout', ['as' => 'auth/logout', 'uses' => 'Auth\AuthController@getLogout']);
+//Route::get('auth/login', 'Auth\AuthController@getLogin');
+//Route::post('auth/login', ['as' =>'auth/login', 'uses' => 'Auth\AuthController@postLogin']);
+//Route::get('auth/logout', ['as' => 'auth/logout', 'uses' => 'Auth\AuthController@getLogout']);
 
 Route::get('listar', 'TallerController@listar');
 
@@ -66,7 +66,6 @@ Route::resource('respuesta','RespuestaController');
 Route::get('index2/{id}', 'PreguntaController@index2')->name('index2');
 
 Route::get('resp_index2/{id}', 'RespuestaController@index2')->name('resp_index2');
-
 
 
 

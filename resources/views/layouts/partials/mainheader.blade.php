@@ -46,7 +46,7 @@
                         <!-- Menu Footer-->
                         <li class="user-footer">
                             <div class="pull-right">
-                                <a href="{{ url('/logout') }}" class="btn btn-default btn-flat">Cerrar Sesión</a>
+                                <a href="{{ url('/salir') }}" class="btn btn-default btn-flat">Cerrar Sesión</a>
                             </div>
                         </li>
                     </ul>

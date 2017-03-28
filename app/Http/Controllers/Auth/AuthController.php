@@ -4,6 +4,11 @@ namespace App\Http\Controllers\Auth;
 
 use App\User;
 use Validator;
+use Auth;
+use Input;
+use Redirect;
+use DB;
+use Session;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
@@ -39,7 +44,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware($this->guestMiddleware(), ['except' => 'logout']);
+        $this->middleware($this->guestMiddleware(), ['except' => 'Salir']);
     }
 
     /**
@@ -71,5 +76,37 @@ class AuthController extends Controller
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
         ]);
+    }
+
+    public function iniciarSesion(){
+        $username = Input::get('username');
+        $password = Input::get('password');
+        if(Auth::attempt(['username' => $username, 'password' => $password])){
+            $userDB = DB::table('users')->where('username',$username)->first();
+            switch ($userDB->rol) {
+                case '0'://estudiante
+                    Session::put('idUser', 'estudiante');
+                    Session::put('Username', $userDB->username);
+                break;
+                case '1'://administrador
+                    Session::put('idUser', 'administrador');
+                    Session::put('Username', $userDB->username);
+                break;
+                default:
+                    return Redirect::to('/');
+                break;
+            }
+            return Redirect::to('home');
+        }else{
+            error_log('Lo sentimos, su usuario o contrase&ntilde;a son incorrectos.');
+        }
+            return Redirect::to('/');        
+    }
+
+    public function Salir()
+    {
+        Auth::logout();
+        Session::flush();
+        return Redirect::to('/');
     }
 }
