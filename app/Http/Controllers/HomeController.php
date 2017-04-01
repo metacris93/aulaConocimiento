@@ -79,19 +79,54 @@ where ta.curso_id = 1',[$user]);
 
     public function homePage()
     {
-        $idUser = Session::get('idUser');
-        switch ($idUser) {
-            case 'estudiante':
-                return Redirect::to('home');
-            break;
-            case 'administrador':
-                return Redirect::to('home');
-            break;
-            default:
-                return view('auth/login');
-            break;
+        /* Inicio - Integración con aula del conocimiento - CJE */
+
+        //Si no existe user logeado y existe parametro usernameGestion,
+        //obtengo el mismo usuario de base Aula
+        if(!Auth::check() && isset($_GET['usernameGestion'])){
+            $usernameGestion = trim($_GET['usernameGestion']);
+            $userAulaByUsernameGestion = DB::table('users')->where('username', $usernameGestion)->first();
+
+            if(!is_null($userAulaByUsernameGestion)){
+                //Autenticación por ID del usuario Aula
+                Auth::loginUsingId($userAulaByUsernameGestion->id);
+                
+                if(Auth::check()){
+                    switch (auth()->user()->rol) {
+                        case '0'://estudiante
+                            Session::put('idUser', 'estudiante');
+                            Session::put('Username', $userAulaByUsernameGestion->username);
+                        break;
+                        case '1'://administrador
+                            Session::put('idUser', 'administrador');
+                            Session::put('Username', $userAulaByUsernameGestion->username);
+                        break;
+                        default:
+                            return Redirect::Back();
+                        break;
+                    }
+                    return Redirect::to('home');
+                }
+            }
+            return Redirect::Back();
+        
+        /* Fin - Integración con aula del conocimiento */
         }
-        return view('auth/login');
+        else{
+            $idUser = Session::get('idUser');
+            switch ($idUser) {
+                case 'estudiante':
+                    return Redirect::to('home');
+                break;
+                case 'administrador':
+                    return Redirect::to('home');
+                break;
+                default:
+                    return view('auth/login');
+                break;
+            }
+            return view('auth/login');
+        }
     }
 
 }

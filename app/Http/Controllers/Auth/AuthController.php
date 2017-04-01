@@ -79,8 +79,10 @@ class AuthController extends Controller
     }
 
     public function iniciarSesion(){
+
         $username = Input::get('username');
         $password = Input::get('password');
+        
         if(Auth::attempt(['username' => $username, 'password' => $password])){
             $userDB = DB::table('users')->where('username',$username)->first();
             switch ($userDB->rol) {
