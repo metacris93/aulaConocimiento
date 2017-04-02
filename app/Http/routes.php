@@ -18,6 +18,7 @@ Route::get('home','HomeController@index');
 //////////////////////////////////////////
 Route::post('iniciarSesion', 'Auth\AuthController@iniciarSesion');
 Route::get('salir', 'Auth\AuthController@Salir');
+Route::get('aula/{username}/{token}' , 'HomeController@AulaRedis');
 //////////////////////////////////////////
 
 //Route::get('auth/login', 'Auth\AuthController@getLogin');

@@ -15,6 +15,8 @@ use App\EvaluacionUsers;
 use App\Evaluacion;
 use Session;
 use Redirect;
+use App\User;
+use LRedis as Redis;
 
 
 /**
@@ -30,7 +32,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth', ['except' => 'homePage']); 
+        $this->middleware('auth', ['except' => ['homePage' , 'Redis', 'AulaRedis']]); 
     }
 
     /**
@@ -92,6 +94,52 @@ where ta.curso_id = 1',[$user]);
             break;
         }
         return view('auth/login');
+    }
+
+    public function AulaRedis($username , $token)
+    {
+        $redis = Redis::connection();        
+        if($redis->exists($username))
+        {
+            $_token = $redis->get($username);
+            $userDB = DB::table('users')->where('username',$username)->first();
+            if( strcmp($_token , $token) == 0 )
+            {   
+                Session::put('Username', $userDB->username);
+                Auth::loginUsingId($userDB->id , true);
+                switch ($userDB->rol) {
+                    case '0':
+                        Session::put('idUser', 'estudiante');
+                    break;
+                    case '1':
+                        Session::put('idUser', 'administrador');
+                    break;
+                    default:
+                        $args = array(
+                            'error' => 'El rol del usuario es desconocido'
+                        );
+                        return view('errors.403')->with( 'errores' , $args);
+                    break;
+                }
+                $redis->close();
+                return Redirect::to('home');
+            }
+            else
+            {
+                $args = array(
+                    'error' => 'Error en el token'
+                );
+                return view('errors.403')->with( 'errores' , $args);
+            }
+        }
+        else
+        {
+            $args = array(
+                'error' => 'El usuario no esta autenticado'
+            );
+            return view('errors.403')->with( 'errores' , $args);
+        }
+        
     }
 
 }

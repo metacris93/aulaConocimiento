@@ -20,7 +20,7 @@
             </div>
         @endif
 
-
+        @if (! Auth::guest())
         <!-- Sidebar Menu -->
         <ul class="sidebar-menu">
             <li class="header">Tutorias</li>
@@ -101,7 +101,10 @@
                         <span>Tutorias</span></a>
                     </li> -->
                 <!-- </ul> -->
+            </ul>
+            @endif
             
+        @if (! Auth::guest())    
             @if (! Auth::user()->rol == 0)
             <li class="header"> </li>
             <li class="treeview">
@@ -115,6 +118,7 @@
                 </ul>
             </li>
             @endif
+        @endif
     </section>
     <!-- /.sidebar -->
 </aside>
