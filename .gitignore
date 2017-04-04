@@ -5,3 +5,31 @@
 Homestead.yaml
 Homestead.json
 /config/database.php
+
+lara# Created by .ignore support plugin (hsz.mobi)
+### Laravel template
+vendor/
+node_modules/
+
+# Laravel 4 specific
+bootstrap/compiled.php
+app/storage/
+
+# Laravel 5 & Lumen specific
+bootstrap/cache/
+.env.*.php
+.env.php
+.env
+
+# Rocketeer PHP task runner and deployment package. https://github.com/rocketeers/rocketeer
+.rocketeer/
+### Example user template template
+### Example user template
+
+# IntelliJ project files
+.idea
+*.iml
+out
+gen
+.phpstorm.meta.php
+_ide_helper.php
