@@ -122,10 +122,10 @@ where ta.curso_id = 1',[$user]);
                     return Redirect::to('home');
                 break;
                 default:
-                    return view('auth/login');
+                    return view('layouts/HDCImage');
                 break;
             }
-            return view('auth/login');
+            return view('layouts/HDCImage');
         }
     }
 
