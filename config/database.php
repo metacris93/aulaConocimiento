@@ -54,11 +54,11 @@ return [
 
         'mysql' => [
             'driver'    => 'mysql',
-            'host'      => '127.0.0.1'//'138.197.34.45',
+            'host'      => '138.197.34.45',
             'port'      => '3306',
             'database'  => 'aulaconocimiento',
-            'username'  => 'root'//'gestionHC',
-            'password'  => 'sqlite'//'G3stionHC_2017',            
+            'username'  => 'gestionHC',
+            'password'  => 'G3stionHC_2017',            
             'charset'   => 'utf8',
             'collation' => 'utf8_unicode_ci',
             'prefix'    => '',
