@@ -5,7 +5,7 @@
         <small>@yield('contentheader_description')</small>
     </h1>
     <ol class="breadcrumb">
-         <li><a href="{{ URL::previous() }}"><i class="fa fa-dashboard"></i> Atrás</a></li>
-        <li class="active">{{ trans('adminlte_lang::message.here') }}</li> 
+         <a href="{{url('/moduloGestion')}}">Gesti&oacute;n</a>
+        <!--<li class="active">{{ trans('adminlte_lang::message.here') }}</li>--> 
     </ol>
 </section>

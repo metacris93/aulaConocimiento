@@ -37,6 +37,10 @@ class AuthController extends Controller
 
     protected $username = 'username';
 
+    protected $loginView = 'layouts/HDCImage';
+
+    protected $redirectAfterLogout = 'logout';
+
     /**
      * Create a new authentication controller instance.
      *
@@ -76,6 +80,11 @@ class AuthController extends Controller
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
         ]);
+    }
+
+    public function logout()
+    {
+        return view('layouts/HDCImage');
     }
 
     public function iniciarSesion(){

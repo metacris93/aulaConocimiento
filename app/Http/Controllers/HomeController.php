@@ -81,25 +81,25 @@ where ta.curso_id = 1',[$user]);
     {
         /* Inicio - Integración con aula del conocimiento - CJE */
 
-        //Si no existe user logeado y existe parametro usernameGestion,
+        //Si no existe user logeado y existe parametro usernameAula,
         //obtengo el mismo usuario de base Aula
-        if(!Auth::check() && isset($_GET['usernameGestion'])){
-            $usernameGestion = trim($_GET['usernameGestion']);
-            $userAulaByUsernameGestion = DB::table('users')->where('username', $usernameGestion)->first();
+        if(!Auth::check() && isset($_GET['usernameAula'])){
+            $usernameAula = trim($_GET['usernameAula']);
+            $userAulaByUsernameAula = DB::table('users')->where('username', $usernameAula)->first();
 
-            if(!is_null($userAulaByUsernameGestion)){
+            if(!is_null($userAulaByUsernameAula)){
                 //Autenticación por ID del usuario Aula
-                Auth::loginUsingId($userAulaByUsernameGestion->id);
-                
+                Auth::loginUsingId($userAulaByUsernameAula->id);
+                Session::put('usernameGestion' , $usernameAula);
                 if(Auth::check()){
                     switch (auth()->user()->rol) {
                         case '0'://estudiante
                             Session::put('idUser', 'estudiante');
-                            Session::put('Username', $userAulaByUsernameGestion->username);
+                            Session::put('Username', $userAulaByUsernameAula->username);
                         break;
                         case '1'://administrador
                             Session::put('idUser', 'administrador');
-                            Session::put('Username', $userAulaByUsernameGestion->username);
+                            Session::put('Username', $userAulaByUsernameAula->username);
                         break;
                         default:
                             return Redirect::Back();
@@ -129,4 +129,8 @@ where ta.curso_id = 1',[$user]);
         }
     }
 
+    public function moduloGestion()
+    {
+        return Redirect::to(env('APP_GESTION_URL').':'.env('APP_GESTION_PORT').'/aulaConocimiento/?usernameGestion='.Session::get('usernameGestion'));        
+    }
 }

@@ -18,9 +18,11 @@ Route::get('home','HomeController@index');
 //////////////////////////////////////////
 Route::post('iniciarSesion', 'Auth\AuthController@iniciarSesion');
 Route::get('salir', 'Auth\AuthController@Salir');
+Route::get('moduloGestion' , 'HomeController@moduloGestion');
 //////////////////////////////////////////
 
-//Route::get('auth/login', 'Auth\AuthController@getLogin');
+Route::get('login', 'Auth\AuthController@getLogin');
+Route::get('logout' , 'Auth\AuthController@logout');
 //Route::post('auth/login', ['as' =>'auth/login', 'uses' => 'Auth\AuthController@postLogin']);
 //Route::get('auth/logout', ['as' => 'auth/logout', 'uses' => 'Auth\AuthController@getLogout']);
 
