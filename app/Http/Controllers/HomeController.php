@@ -15,6 +15,7 @@ use App\EvaluacionUsers;
 use App\Evaluacion;
 use Session;
 use Redirect;
+use Config;
 
 
 /**
@@ -131,6 +132,6 @@ where ta.curso_id = 1',[$user]);
 
     public function moduloGestion()
     {
-        return Redirect::to(env('APP_GESTION_URL').':'.env('APP_GESTION_PORT').'/aulaConocimiento/?usernameGestion='.Session::get('usernameGestion'));        
+        return Redirect::to(Config::get('constantes.APP_GESTION_URL').':'.Config::get('constantes.APP_GESTION_PORT').'/aulaConocimiento/?usernameGestion='.Session::get('usernameGestion'));        
     }
 }
