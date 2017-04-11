@@ -16,6 +16,8 @@ use App\Evaluacion;
 use Session;
 use Redirect;
 use Config;
+use Crypt;
+use Illuminate\Contracts\Encryption\DecryptException;
 
 
 /**
@@ -78,60 +80,94 @@ where ta.curso_id = 1',[$user]);
         return view('home',['pastel'=>$collection])->with('tutoria',$tutoria);
     }
 
+    /* Inicio - Integración con aula del conocimiento CJE*/
     public function homePage()
     {
-        /* Inicio - Integración con aula del conocimiento - CJE */
+        if(isset($_GET['tokenhc'])){
+            
+            $payload = Crypt::decrypt(trim($_GET['tokenhc']));
+            $tokenGestion = $payload['tokenGestion'];
+            $usernameGestion = $payload['usernameGestion'];
 
-        //Si no existe user logeado y existe parametro usernameAula,
-        //obtengo el mismo usuario de base Aula
-        if(!Auth::check() && isset($_GET['usernameAula'])){
-            $usernameAula = trim($_GET['usernameAula']);
-            $userAulaByUsernameAula = DB::table('users')->where('username', $usernameAula)->first();
+            if(!Auth::check()){
 
-            if(!is_null($userAulaByUsernameAula)){
-                //Autenticación por ID del usuario Aula
-                Auth::loginUsingId($userAulaByUsernameAula->id);
-                Session::put('usernameGestion' , $usernameAula);
-                if(Auth::check()){
-                    switch (auth()->user()->rol) {
-                        case '0'://estudiante
-                            Session::put('idUser', 'estudiante');
-                            Session::put('Username', $userAulaByUsernameAula->username);
+                $userAulaByUsernameGestion = DB::table('users')->where('username', $usernameGestion)->first();
+                if(!is_null($userAulaByUsernameGestion)){
+
+                    //Autenticación por ID del usuario Aula
+                    Auth::loginUsingId($userAulaByUsernameGestion->id);
+
+                    if(Auth::check()){
+                        
+                        Session::put('usernameGestion', $usernameGestion);
+                        Session::put('tokenGestion', $tokenGestion);
+
+                        unset($payload, $tokenGestion, $usernameGestion);
+
+                        switch (auth()->user()->rol) {
+                            case '0'://estudiante
+                                Session::put('idUser', 'estudiante');
+                                Session::put('Username', $userAulaByUsernameGestion->username);
+                            break;
+                            case '1'://administrador
+                                Session::put('idUser', 'administrador');
+                                Session::put('Username', $userAulaByUsernameGestion->username);
+                            break;
+                            default:
+                                return Redirect::Back();
+                            break;
+                        }
+                        Session::save();
+                        return Redirect::to('home');
+                    }
+                }
+                unset($payload, $tokenGestion, $usernameGestion);
+                return Redirect::Back();
+            }
+            else{
+                
+                if(strcmp(Session::get('tokenGestion'), $tokenGestion) == 0 && 
+                   strcmp(Session::get('usernameGestion'), $usernameGestion) == 0){
+                    
+                    $idUser = Session::get('idUser');
+                    unset($payload, $tokenGestion, $usernameGestion);
+                    switch ($idUser) {
+                        case 'estudiante':
+                            return Redirect::to('home');
                         break;
-                        case '1'://administrador
-                            Session::put('idUser', 'administrador');
-                            Session::put('Username', $userAulaByUsernameAula->username);
+                        case 'administrador':
+                            return Redirect::to('home');
                         break;
                         default:
-                            return Redirect::Back();
+                            return view('layouts/HDCImage');
                         break;
                     }
-                    return Redirect::to('home');
+                }
+                else{
+
+                    unset($payload, $tokenGestion, $usernameGestion);
+                    Auth::logout();
+                    Session::flush();
+                    return Redirect::to(Config::get('constantes.APP_AULA_URL').':'.Config::get('constantes.APP_AULA_PORT')
+                        .'/?tokenhc='.$_GET['tokenhc']);
+
                 }
             }
-            return Redirect::Back();
-        
-        /* Fin - Integración con aula del conocimiento */
         }
         else{
-            $idUser = Session::get('idUser');
-            switch ($idUser) {
-                case 'estudiante':
-                    return Redirect::to('home');
-                break;
-                case 'administrador':
-                    return Redirect::to('home');
-                break;
-                default:
-                    return view('layouts/HDCImage');
-                break;
-            }
-            return view('layouts/HDCImage');
+            return Redirect::to(Config::get('constantes.APP_GESTION_URL').':'.Config::get('constantes.APP_GESTION_PORT').'/');
         }
     }
 
     public function moduloGestion()
     {
-        return Redirect::to(Config::get('constantes.APP_GESTION_URL').':'.Config::get('constantes.APP_GESTION_PORT').'/aulaConocimiento/?usernameGestion='.Session::get('usernameGestion'));        
+        return Redirect::to(Config::get('constantes.APP_GESTION_URL').':'.Config::get('constantes.APP_GESTION_PORT')
+            .'/aulaConocimiento/?tokenac='.Crypt::encrypt(
+            [
+                'usernameAula' => Session::get('usernameGestion'),
+                'tokenAula' => Session::get('tokenGestion')
+            ]));     
     }
+            
+    /* Fin - Integración con aula del conocimiento */
 }
